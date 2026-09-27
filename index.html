@@ -1398,8 +1398,8 @@ button.ios-press:active,
     import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
     // Backend Supabase (publishable key: safe to expose in a browser app; RLS protects user data).
-    const SUPABASE_URL = "https://libdbouagihqrshrjzdo.supabase.co";
-    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_fHBsQZiZ6iA0B3JY9PJlGA_uAaWnDss";
+    const SUPABASE_URL = "https://lttnxzjqzkufkwbqwmko.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_HKZWxGwqNoHTj-6PD_Hj4g__CKo60Hs";
     const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
       auth: {
         persistSession: true,
@@ -2915,15 +2915,35 @@ button.ios-press:active,
     $("jsonFileInput").onchange = e => {
       const file = e.target.files[0];
       if (!file) return;
+
       const reader = new FileReader();
       reader.onload = async evt => {
         try {
           if (!currentUser) return notify("Connectez-vous avant d'importer", "error");
-          const raw = JSON.parse(evt.target.result);
-          const list = Array.isArray(raw) ? raw : (raw.transactions || []);
-          if (!list.length) return notify("Aucune opération trouvée", "error");
-
           if (!currentHouseholdId) return notify("Aucun foyer Supabase actif", "error");
+
+          const raw = JSON.parse(evt.target.result);
+
+          // Compatibilité avec les anciens exports : un simple tableau reste importable.
+          const list = Array.isArray(raw)
+            ? raw
+            : (Array.isArray(raw?.transactions) ? raw.transactions : []);
+
+          const importedBudgets = !Array.isArray(raw) && raw?.budgets && typeof raw.budgets === "object"
+            ? raw.budgets
+            : {};
+
+          const budgetRows = Object.entries(importedBudgets).map(([category, amount]) => ({
+            household_id: currentHouseholdId,
+            category,
+            monthly_amount: Math.max(0, Number(amount) || 0)
+          }));
+
+          if (!list.length && !budgetRows.length) {
+            return notify("Aucune donnée trouvée dans ce fichier", "error");
+          }
+
+          // Opérations : import par lots, comme avant.
           for (let i = 0; i < list.length; i += 300) {
             const rows = list.slice(i, i + 300).map(t => {
               const date = t.date || new Date().toISOString().slice(0, 10);
@@ -2944,21 +2964,50 @@ button.ios-press:active,
                 is_reimbursed: !!(t.isReimbursed ?? t.is_reimbursed)
               };
             });
-            const { error } = await supabase.from("household_transactions").upsert(rows, { onConflict: "household_id,client_entry_id" });
+
+            const { error } = await supabase
+              .from("household_transactions")
+              .upsert(rows, { onConflict: "household_id,client_entry_id" });
+
             if (error) throw error;
           }
+
+          // Budgets : ajout/mise à jour non destructive des catégories présentes dans la sauvegarde.
+          if (budgetRows.length) {
+            const { error } = await supabase
+              .from("household_budgets")
+              .upsert(budgetRows, { onConflict: "household_id,category" });
+
+            if (error) throw error;
+          }
+
           await loadTransactions();
-          notify(`${list.length} opérations importées dans Supabase`, "cloud_done");
-          $("jsonFileInput").value = "";
+          await loadBudgets();
+
+          const imported = [];
+          if (list.length) imported.push(`${list.length} opération${list.length > 1 ? "s" : ""}`);
+          if (budgetRows.length) imported.push(`${budgetRows.length} budget${budgetRows.length > 1 ? "s" : ""}`);
+
+          notify(`${imported.join(" et ")} importé${imported.length > 1 || list.length > 1 || budgetRows.length > 1 ? "s" : ""} dans Supabase`, "cloud_done");
         } catch (err) {
-          notify("Fichier JSON invalide", "error");
+          console.error(err);
+          notify("Erreur d'import : " + (err?.message || "fichier JSON invalide"), "error");
+        } finally {
+          $("jsonFileInput").value = "";
         }
       };
       reader.readAsText(file);
     };
 
     const buildExportFile = () => {
-      const json = JSON.stringify(transactions, null, 2);
+      const backup = {
+        version: 2,
+        exportedAt: new Date().toISOString(),
+        transactions,
+        budgets
+      };
+
+      const json = JSON.stringify(backup, null, 2);
       const filename = `budget_${currentMonth}.json`;
       const blob = new Blob([json], { type: "application/json" });
       const file = new File([blob], filename, { type: "application/json" });
@@ -2975,8 +3024,8 @@ button.ios-press:active,
         }
 
         const shareData = {
-          title: "Export Budget",
-          text: `Export des opérations — ${currentMonth}`
+          title: "Sauvegarde Budget",
+          text: `Sauvegarde complète — opérations et budgets — ${currentMonth}`
         };
 
         if (navigator.canShare?.({ files: [file] })) {
@@ -2992,6 +3041,7 @@ button.ios-press:active,
         }
       }
     };
+
 
     let savedPalette = "blue";
     try { savedPalette = localStorage.getItem("budget_ios_color") || localStorage.getItem("budget_pixel_color") || "blue"; } catch(e){}
