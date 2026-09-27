@@ -929,6 +929,10 @@ button.ios-press:active,
             </button>
           </div>
 
+          <div class="auth-secondary-row" id="authForgotRow" style="justify-content:flex-end; margin-top:6px;">
+            <button class="auth-text-btn" id="authForgotPassword" type="button">Mot de passe oublié ?</button>
+          </div>
+
           <div class="auth-confirm-wrap" id="authConfirmWrap" hidden>
             <label class="auth-field-label" for="authPasswordConfirm">Confirmer le mot de passe</label>
             <div class="auth-input-wrap">
@@ -955,6 +959,43 @@ button.ios-press:active,
           <div class="auth-status" id="authEmailStatus" role="status" aria-live="polite"></div>
         </form>
 
+        <form class="auth-step" id="authRecoveryStep" novalidate hidden>
+          <div class="auth-step-title">Nouveau mot de passe</div>
+          <div class="auth-step-copy">Choisissez un nouveau mot de passe pour votre compte Budget.</div>
+
+          <label class="auth-field-label" for="authRecoveryPassword">Nouveau mot de passe</label>
+          <div class="auth-input-wrap">
+            <span class="material-symbols-rounded" aria-hidden="true">lock_reset</span>
+            <input
+              class="auth-input"
+              id="authRecoveryPassword"
+              type="password"
+              autocomplete="new-password"
+              placeholder="Nouveau mot de passe"
+              required
+            />
+          </div>
+
+          <label class="auth-field-label" for="authRecoveryPasswordConfirm">Confirmer le mot de passe</label>
+          <div class="auth-input-wrap">
+            <span class="material-symbols-rounded" aria-hidden="true">verified_user</span>
+            <input
+              class="auth-input"
+              id="authRecoveryPasswordConfirm"
+              type="password"
+              autocomplete="new-password"
+              placeholder="Retapez le mot de passe"
+              required
+            />
+          </div>
+
+          <button class="auth-primary" id="authRecoverySave" type="submit">
+            <span>Enregistrer le nouveau mot de passe</span>
+            <span class="material-symbols-rounded" aria-hidden="true" style="font-size:19px;">check</span>
+          </button>
+
+          <div class="auth-status" id="authRecoveryStatus" role="status" aria-live="polite"></div>
+        </form>
 
       </div>
 
@@ -2250,11 +2291,31 @@ button.ios-press:active,
       }
     }
 
+    let passwordRecoveryActive = /(?:^|[&#?])type=recovery(?:&|$)/i.test(`${location.search}${location.hash}`);
+
     function showEmailStep(email = "") {
+      passwordRecoveryActive = false;
+      $("authRecoveryStep").hidden = true;
+      $("authEmailStep").hidden = false;
       $("authEmail").value = email || $("authEmail").value || "";
       $("authPassword").value = "";
+      $("authRecoveryPassword").value = "";
+      $("authRecoveryPasswordConfirm").value = "";
       setAuthStatus("authEmailStatus", "");
+      setAuthStatus("authRecoveryStatus", "");
+      setAuthGateVisible(true);
       setTimeout(() => $("authEmail")?.focus(), 80);
+    }
+
+    function showRecoveryStep() {
+      passwordRecoveryActive = true;
+      $("authEmailStep").hidden = true;
+      $("authRecoveryStep").hidden = false;
+      $("authRecoveryPassword").value = "";
+      $("authRecoveryPasswordConfirm").value = "";
+      setAuthStatus("authRecoveryStatus", "");
+      setAuthGateVisible(true);
+      setTimeout(() => $("authRecoveryPassword")?.focus(), 80);
     }
 
     async function applyAuthUser(user) {
@@ -2303,10 +2364,15 @@ button.ios-press:active,
     // Keep the application locked until Supabase tells us whether a session exists.
     setAuthGateVisible(true);
     const { data: initialSessionData } = await supabase.auth.getSession();
-    await applyAuthUser(initialSessionData?.session?.user || null);
+    if (passwordRecoveryActive && initialSessionData?.session) showRecoveryStep();
+    else await applyAuthUser(initialSessionData?.session?.user || null);
 
     supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === "INITIAL_SESSION") return;
+      if (event === "PASSWORD_RECOVERY") {
+        showRecoveryStep();
+        return;
+      }
+      if (event === "INITIAL_SESSION" || passwordRecoveryActive) return;
       await applyAuthUser(session?.user || null);
     });
 
@@ -2321,6 +2387,7 @@ button.ios-press:active,
       $("authModeLogin").setAttribute("aria-selected", String(!signup));
       $("authModeSignup").setAttribute("aria-selected", String(signup));
       $("authConfirmWrap").hidden = !signup;
+      $("authForgotRow").hidden = signup;
 
       $("authFormTitle").textContent = signup ? "Créer votre compte" : "Bon retour";
       $("authFormCopy").textContent = signup
@@ -2398,6 +2465,69 @@ button.ios-press:active,
         }
 
         setAuthStatus("authEmailStatus", message, true);
+      } finally {
+        setAuthButtonBusy(btn, false);
+      }
+    });
+
+    $("authForgotPassword").onclick = async () => {
+      const email = $("authEmail").value.trim().toLowerCase();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        setAuthStatus("authEmailStatus", "Entrez d’abord votre adresse e-mail.", true);
+        $("authEmail").focus();
+        return;
+      }
+
+      const btn = $("authForgotPassword");
+      btn.disabled = true;
+      setAuthStatus("authEmailStatus", "Envoi du lien de réinitialisation…");
+
+      try {
+        const redirectTo = /^https?:$/.test(location.protocol)
+          ? `${location.origin}${location.pathname}`
+          : undefined;
+        const { error } = await supabase.auth.resetPasswordForEmail(
+          email,
+          redirectTo ? { redirectTo } : undefined
+        );
+        if (error) throw error;
+        setAuthStatus("authEmailStatus", "E-mail envoyé. Ouvrez le lien reçu pour choisir un nouveau mot de passe.");
+      } catch (err) {
+        const raw = String(err?.message || "");
+        setAuthStatus("authEmailStatus", raw || "Impossible d’envoyer l’e-mail de réinitialisation.", true);
+      } finally {
+        btn.disabled = false;
+      }
+    };
+
+    $("authRecoveryStep").addEventListener("submit", async e => {
+      e.preventDefault();
+      const password = $("authRecoveryPassword").value;
+      const confirmation = $("authRecoveryPasswordConfirm").value;
+      const btn = $("authRecoverySave");
+
+      if (password.length < 6) {
+        setAuthStatus("authRecoveryStatus", "Le mot de passe doit contenir au moins 6 caractères.", true);
+        return;
+      }
+      if (password !== confirmation) {
+        setAuthStatus("authRecoveryStatus", "Les deux mots de passe ne correspondent pas.", true);
+        return;
+      }
+
+      setAuthStatus("authRecoveryStatus", "");
+      setAuthButtonBusy(btn, true, "Mise à jour…");
+
+      try {
+        const { data, error } = await supabase.auth.updateUser({ password });
+        if (error) throw error;
+        passwordRecoveryActive = false;
+        if (location.hash) history.replaceState(null, "", `${location.pathname}${location.search}`);
+        await applyAuthUser(data?.user || null);
+        notify("Mot de passe mis à jour", "check_circle");
+      } catch (err) {
+        const raw = String(err?.message || "");
+        setAuthStatus("authRecoveryStatus", raw || "Impossible de modifier le mot de passe.", true);
       } finally {
         setAuthButtonBusy(btn, false);
       }
