@@ -727,15 +727,15 @@ body > #navBar.nav-bar .nav-item .nav-indicator,
 .budget-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .budget-status{margin-top:2px;font-weight:600;color:var(--md-sys-color-outline);white-space:nowrap;overflow:visible;text-overflow:clip;line-height:1.2;}
 .budget-input{width:auto;min-width:74px;max-width:min(180px,42vw);flex:0 0 auto;min-height:38px;text-align:right;padding:8px 10px;font-weight:700;font-size:14px;}
-.budget-settings-card{padding:0 !important;overflow:hidden;}
-.budget-settings-toggle{width:100%;min-height:76px;padding:15px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;border:0;background:transparent;color:var(--nb-black);font:inherit;text-align:left;cursor:pointer;}
-.budget-settings-toggle-copy{min-width:0;display:flex;flex-direction:column;gap:5px;}
-.budget-settings-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;}
-.budget-settings-summary{font-size:11px;line-height:1.35;font-weight:600;color:var(--nb-muted);}
-.budget-settings-chevron{width:36px;height:36px;flex:0 0 36px;display:grid;place-items:center;border:2px solid var(--nb-black);border-radius:12px;background:var(--nb-yellow);box-shadow:2px 2px 0 var(--nb-black);}
-.budget-settings-chevron .material-symbols-rounded{font-size:21px !important;font-weight:700 !important;}
-.budget-settings-content{padding:14px 18px 18px;border-top:2px dashed var(--nb-black);}
-.budget-settings-content[hidden]{display:none !important;}
+.settings-collapse-card{padding:0 !important;overflow:hidden;}
+.settings-collapse-toggle{width:100%;min-height:76px;padding:15px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;border:0;background:transparent;color:var(--nb-black);font:inherit;text-align:left;cursor:pointer;}
+.settings-collapse-copy{min-width:0;display:flex;flex-direction:column;gap:5px;}
+.settings-collapse-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;}
+.settings-collapse-summary{font-size:11px;line-height:1.35;font-weight:600;color:var(--nb-muted);}
+.settings-collapse-chevron{width:36px;height:36px;flex:0 0 36px;display:grid;place-items:center;border:2px solid var(--nb-black);border-radius:12px;background:var(--nb-yellow);box-shadow:2px 2px 0 var(--nb-black);}
+.settings-collapse-chevron .material-symbols-rounded{font-size:21px !important;font-weight:700 !important;}
+.settings-collapse-content{padding:14px 18px 18px;border-top:2px dashed var(--nb-black);}
+.settings-collapse-content[hidden]{display:none !important;}
 #screenOperations .sec-header{position:relative !important;height:64px !important;min-height:64px !important;padding:0 2px !important;margin-top:0 !important;margin-bottom:6px !important;}
 #screenOperations .sec-header-default{position:absolute !important;inset:0 2px !important;min-height:0 !important;height:64px !important;align-items:center !important;}
 #screenOperations .sec-header-copy{transform:none !important;}
@@ -1203,50 +1203,58 @@ button.ios-press:active,
 
     <!-- Écran 3 : Options -->
     <div id="screenSettings" class="screen">
-      <div class="ios-card budget-settings-card" style="margin-bottom: 14px;">
-        <button id="budgetSettingsToggle" class="budget-settings-toggle ios-press" type="button" aria-expanded="false" aria-controls="budgetSettingsContent" aria-label="Déplier les budgets par catégorie">
-          <span class="budget-settings-toggle-copy">
-            <span class="budget-settings-title">Budgets par catégorie</span>
-            <span id="budgetCollapseSummary" class="budget-settings-summary">Aucune enveloppe définie</span>
+      <div class="ios-card settings-collapse-card" style="margin-bottom: 14px;">
+        <button id="budgetSettingsToggle" class="settings-collapse-toggle ios-press" type="button" aria-expanded="false" aria-controls="budgetSettingsContent" aria-label="Déplier les budgets par catégorie">
+          <span class="settings-collapse-copy">
+            <span class="settings-collapse-title">Budgets par catégorie</span>
+            <span id="budgetCollapseSummary" class="settings-collapse-summary">Aucune enveloppe définie</span>
           </span>
-          <span class="budget-settings-chevron" aria-hidden="true"><span class="material-symbols-rounded">expand_more</span></span>
+          <span class="settings-collapse-chevron" aria-hidden="true"><span class="material-symbols-rounded">expand_more</span></span>
         </button>
-        <div id="budgetSettingsContent" class="budget-settings-content" hidden>
+        <div id="budgetSettingsContent" class="settings-collapse-content" hidden>
           <div style="font-size: 11px; color: var(--md-sys-color-outline); margin-bottom: 10px;">Définissez une enveloppe mensuelle par catégorie pour calculer le reste à vivre prévu. Un budget à 0 € signifie qu'aucune dépense n'est autorisée.</div>
           <div id="budgetOverSummary" style="margin-bottom:10px;"></div>
           <div id="budgetsList"></div>
         </div>
       </div>
-      <div class="ios-card">
-        <div style="font-size: 11px; font-weight: 800; color: var(--nb-black); text-transform: uppercase; margin-bottom: 12px;">Sauvegarde & Données</div>
-        <div style="display: flex; flex-direction: column; gap: 12px;">
-          <div class="data-export-cell">
-            <div class="data-export-copy">
-              <div class="data-export-title">Importer & partager</div>
-              <div class="data-export-subtitle">Import JSON vers Supabase ou partage avec une autre app</div>
-            </div>
+      <div class="ios-card settings-collapse-card">
+        <button id="dataSettingsToggle" class="settings-collapse-toggle ios-press" type="button" aria-expanded="false" aria-controls="dataSettingsContent" aria-label="Déplier la sauvegarde et les données">
+          <span class="settings-collapse-copy">
+            <span class="settings-collapse-title">Sauvegarde & Données</span>
+            <span class="settings-collapse-summary">Import JSON, partage et export CSV</span>
+          </span>
+          <span class="settings-collapse-chevron" aria-hidden="true"><span class="material-symbols-rounded">expand_more</span></span>
+        </button>
+        <div id="dataSettingsContent" class="settings-collapse-content" hidden>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div class="data-export-cell">
+              <div class="data-export-copy">
+                <div class="data-export-title">Importer & partager</div>
+                <div class="data-export-subtitle">Import JSON vers Supabase ou partage avec une autre app</div>
+              </div>
 
-            <div class="data-export-actions">
-              <button id="btnTriggerImport" class="data-export-button data-export-download ios-press" type="button">
-                <span class="material-symbols-rounded">upload_file</span>
-                <span>Importer</span>
-              </button>
-              <button id="btnShareExport" class="data-export-button data-export-share ios-press" type="button">
-                <span class="material-symbols-rounded">ios_share</span>
-                <span>Partager</span>
+              <div class="data-export-actions">
+                <button id="btnTriggerImport" class="data-export-button data-export-download ios-press" type="button">
+                  <span class="material-symbols-rounded">upload_file</span>
+                  <span>Importer</span>
+                </button>
+                <button id="btnShareExport" class="data-export-button data-export-share ios-press" type="button">
+                  <span class="material-symbols-rounded">ios_share</span>
+                  <span>Partager</span>
+                </button>
+              </div>
+              <input type="file" id="jsonFileInput" accept=".json,application/json" style="display: none;" />
+            </div>
+            <div class="data-export-cell">
+              <div class="data-export-copy">
+                <div class="data-export-title">Exporter les dépenses</div>
+                <div class="data-export-subtitle">Toutes les dépenses du mois sélectionné, y compris les dépenses remboursées.</div>
+              </div>
+              <button id="btnExportCsv" class="data-export-button data-export-download ios-press" type="button">
+                <span class="material-symbols-rounded" aria-hidden="true">download</span>
+                <span>Exporter les dépenses en CSV</span>
               </button>
             </div>
-            <input type="file" id="jsonFileInput" accept=".json,application/json" style="display: none;" />
-          </div>
-          <div class="data-export-cell">
-            <div class="data-export-copy">
-              <div class="data-export-title">Exporter les dépenses</div>
-              <div class="data-export-subtitle">Toutes les dépenses du mois sélectionné, y compris les dépenses remboursées.</div>
-            </div>
-            <button id="btnExportCsv" class="data-export-button data-export-download ios-press" type="button">
-              <span class="material-symbols-rounded" aria-hidden="true">download</span>
-              <span>Exporter les dépenses en CSV</span>
-            </button>
           </div>
         </div>
       </div>
@@ -2019,18 +2027,25 @@ button.ios-press:active,
       return `${count} · ${fmt(tracking.totalBudgeted)} au total · ${status}`;
     };
 
-    function setBudgetSettingsExpanded(expanded) {
-      const toggle = $("budgetSettingsToggle");
-      const content = $("budgetSettingsContent");
+    function setSettingsSectionExpanded(toggleId, contentId, label, expanded) {
+      const toggle = $(toggleId);
+      const content = $(contentId);
       if (!toggle || !content) return;
 
       toggle.setAttribute("aria-expanded", String(expanded));
-      toggle.setAttribute("aria-label", `${expanded ? "Replier" : "Déplier"} les budgets par catégorie`);
+      toggle.setAttribute("aria-label", `${expanded ? "Replier" : "Déplier"} ${label}`);
       content.hidden = !expanded;
       const icon = toggle.querySelector(".material-symbols-rounded");
       if (icon) icon.textContent = expanded ? "expand_less" : "expand_more";
       if (expanded) requestAnimationFrame(() => refreshBudgetRowSizing(content));
     }
+
+    const setBudgetSettingsExpanded = expanded => setSettingsSectionExpanded(
+      "budgetSettingsToggle", "budgetSettingsContent", "les budgets par catégorie", expanded
+    );
+    const setDataSettingsExpanded = expanded => setSettingsSectionExpanded(
+      "dataSettingsToggle", "dataSettingsContent", "la sauvegarde et les données", expanded
+    );
 
     function renderBudgetsSettings() {
       const cont = $("budgetsList");
@@ -3309,6 +3324,11 @@ button.ios-press:active,
     $("budgetSettingsToggle").onclick = () => {
       const expanded = $("budgetSettingsToggle").getAttribute("aria-expanded") === "true";
       setBudgetSettingsExpanded(!expanded);
+    };
+    setDataSettingsExpanded(false);
+    $("dataSettingsToggle").onclick = () => {
+      const expanded = $("dataSettingsToggle").getAttribute("aria-expanded") === "true";
+      setDataSettingsExpanded(!expanded);
     };
 
     const MONTH_NAMES = ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."];
