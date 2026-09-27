@@ -1219,6 +1219,16 @@ button.ios-press:active,
             </div>
             <input type="file" id="jsonFileInput" accept=".json,application/json" style="display: none;" />
           </div>
+          <div class="data-export-cell">
+            <div class="data-export-copy">
+              <div class="data-export-title">Exporter les dépenses</div>
+              <div class="data-export-subtitle">Toutes les dépenses du mois sélectionné, y compris les dépenses remboursées.</div>
+            </div>
+            <button id="btnExportCsv" class="data-export-button data-export-download ios-press" type="button">
+              <span class="material-symbols-rounded" aria-hidden="true">download</span>
+              <span>Exporter les dépenses en CSV</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -3141,6 +3151,49 @@ button.ios-press:active,
         }
       };
       reader.readAsText(file);
+    };
+
+    const buildExpensesCsv = expenses => {
+      // Quoted cells preserve separators, quotes and line breaks; neutralize spreadsheet formulas.
+      const cell = value => {
+        let text = String(value ?? "");
+        if (/^[\s]*[=+@-]/.test(text)) text = "'" + text;
+        return `"${text.replace(/"/g, '""')}"`;
+      };
+      const rows = [["Date", "Libellé", "Catégorie", "Montant (EUR)", "Type", "Remboursée"]];
+      expenses.forEach(t => rows.push([
+        t.date,
+        t.label,
+        ALL_CATS.find(c => c.id === t.category)?.label || t.category || "Divers",
+        (Number(t.amount) || 0).toFixed(2).replace(".", ","),
+        (t.isFixed === true || t.isFixed === "true" || t.isFixed === 1) ? "Fixe" : "Variable",
+        t.isReimbursed ? "Oui" : "Non"
+      ]));
+      // UTF-8 BOM keeps French accents intact when opened in Excel.
+      return "\uFEFF" + rows.map(row => row.map(cell).join(";")).join("\r\n") + "\r\n";
+    };
+
+    $("btnExportCsv").onclick = () => {
+      const expenses = getMonthTx().filter(t => t.type === "expense");
+      if (!expenses.length) return notify("Aucune dépense à exporter pour ce mois", "info");
+
+      let url;
+      const link = document.createElement("a");
+      try {
+        const blob = new Blob([buildExpensesCsv(expenses)], { type: "text/csv;charset=utf-8;" });
+        url = URL.createObjectURL(blob);
+        link.href = url;
+        link.download = `depenses_${currentMonth}.csv`;
+        document.body.appendChild(link);
+        link.click();
+        notify("Export CSV lancé", "download");
+      } catch (err) {
+        notify("Impossible d'exporter les dépenses en CSV", "error");
+      } finally {
+        link.remove();
+        // Leave time for the browser to start reading the download.
+        if (url) setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
     };
 
     const buildExportFile = () => {
