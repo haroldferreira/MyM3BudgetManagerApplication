@@ -1696,10 +1696,7 @@ button.ios-press:active,
       }
 
       const keys = Object.keys(data).sort((a, b) => data[b] - data[a]);
-      const segs = keys.slice(0, 5).map((k, i) => ({ id: k, amt: data[k], color: palette[i % palette.length] }));
-      if (keys.length > 5) {
-        segs.push({ id: "autres", amt: keys.slice(5).reduce((a, k) => a + data[k], 0), color: "#F59BC1" });
-      }
+      const segs = keys.map((k, i) => ({ id: k, amt: data[k], color: palette[i % palette.length] }));
 
       // Neo-brutal donut: black structural ring underneath the colored data.
       ctx.beginPath();
