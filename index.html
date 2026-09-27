@@ -754,6 +754,8 @@ body > #navBar.nav-bar .nav-item .nav-indicator,
 #screenOperations .week-group{gap:18px !important;}
 #screenOperations .week-group-heading{width:100% !important;min-height:48px !important;align-self:stretch !important;justify-content:space-between !important;border-radius:16px !important;box-shadow:4px 4px 0 var(--nb-black) !important;}
 #screenOperations .week-group-heading .date-group-header{flex:1 1 auto !important;padding:12px 10px 12px 15px !important;font-size:13px !important;font-weight:800 !important;letter-spacing:1px !important;white-space:nowrap !important;}
+#screenOperations .week-group-meta{flex:0 0 auto;display:flex;align-items:center;gap:2px;padding-right:2px;}
+#screenOperations .week-group-number{display:inline-flex;align-items:center;justify-content:center;min-width:38px;height:28px;padding:0 8px;border:2px solid var(--nb-black);border-radius:999px;background:var(--nb-bg);color:var(--nb-black);font-size:11px;font-weight:800;letter-spacing:.04em;white-space:nowrap;}
 #screenOperations .week-group-heading .date-group-chevron{width:42px !important;height:42px !important;flex:0 0 42px !important;}
 #screenOperations .week-group-heading .date-group-chevron .material-symbols-rounded{font-size:21px !important;}
 #screenOperations .week-group-days{position:relative !important;width:100% !important;gap:14px !important;padding:3px 0 6px 22px !important;}
@@ -1644,6 +1646,13 @@ button.ios-press:active,
       return `Semaine du ${start.getDate()} ${monthFmt.format(start)} au ${end.getDate()} ${monthFmt.format(end)}`;
     };
 
+    const getIsoWeekNumber = date => {
+      const target = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+      target.setUTCDate(target.getUTCDate() + 4 - (target.getUTCDay() || 7));
+      const yearStart = new Date(Date.UTC(target.getUTCFullYear(), 0, 1));
+      return Math.ceil((((target - yearStart) / 86400000) + 1) / 7);
+    };
+
     function drawDonut(canvasId, totalBadgeId, totalTextId, breakdownId, items, palette, emptyMsg) {
       const data = {};
       const total = items.reduce((acc, t) => {
@@ -1918,13 +1927,17 @@ button.ios-press:active,
                 : true
             );
             const weekLabel = formatWeekLabel(block.start);
+            const weekNumber = getIsoWeekNumber(block.start);
 
             html += `
               <section class="week-group ${weekCollapsed ? 'is-collapsed' : ''}" data-week="${block.key}">
-                <button class="week-group-heading" type="button" data-week="${block.key}" aria-expanded="${weekCollapsed ? 'false' : 'true'}" aria-label="${weekCollapsed ? 'Déplier' : 'Replier'} ${weekLabel}">
+                <button class="week-group-heading" type="button" data-week="${block.key}" aria-expanded="${weekCollapsed ? 'false' : 'true'}" aria-label="${weekCollapsed ? 'Déplier' : 'Replier'} ${weekLabel}, semaine ${weekNumber}">
                   <span class="date-group-header">${weekLabel}</span>
-                  <span class="date-group-chevron" aria-hidden="true">
-                    <span class="material-symbols-rounded">${weekCollapsed ? 'expand_more' : 'expand_less'}</span>
+                  <span class="week-group-meta" aria-hidden="true">
+                    ${weekCollapsed ? `<span class="week-group-number">S${weekNumber}</span>` : ""}
+                    <span class="date-group-chevron">
+                      <span class="material-symbols-rounded">${weekCollapsed ? 'expand_more' : 'expand_less'}</span>
+                    </span>
                   </span>
                 </button>`;
 
