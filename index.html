@@ -1095,7 +1095,7 @@ button.ios-press:active,
         <!-- Recherche -->
         <div class="sec-search-bar" id="secSearchBar">
           <span class="material-symbols-rounded" style="font-size: 19px; color: var(--md-sys-color-primary); flex-shrink: 0;">search</span>
-          <input type="text" id="searchInput" class="sec-search-input" placeholder="Rechercher par libellé, montant..." autocomplete="off" />
+          <input type="text" id="searchInput" class="sec-search-input" placeholder="Rechercher par libellé, catégorie, montant..." autocomplete="off" />
           <button class="sec-search-close ios-press" id="btnCloseSearch" title="Fermer la recherche">
             <span class="material-symbols-rounded" style="font-size: 18px;">close</span>
           </button>
@@ -1521,6 +1521,11 @@ button.ios-press:active,
       ]
     };
     const ALL_CATS = [...CATS.expense, ...CATS.income];
+    const normalizeSearchText = value => String(value || "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLocaleLowerCase("fr-FR")
+      .trim();
 
     let currentUser = null, currentHouseholdId = null, realtimeChannel = null, transactions = [];
     let budgets = {}; // { [categoryId]: montant mensuel }
@@ -1752,10 +1757,19 @@ button.ios-press:active,
       });
 
       if (searchQuery.trim()) {
-        const q = searchQuery.toLowerCase().trim();
+        const q = normalizeSearchText(searchQuery);
+        const amountQuery = searchQuery.trim().replace(',', '.');
+
         list = list.filter(t => {
           const [y, m, d] = (t.date || "").split("-");
-          return (Number(t.amount) || 0).toFixed(2).includes(q.replace(',', '.')) || (t.label || "").toLowerCase().includes(q) || `${d}/${m}`.includes(q);
+          const category = ALL_CATS.find(cat => cat.id === t.category);
+          const searchableCategory = normalizeSearchText(`${t.category || ""} ${category?.label || ""}`);
+
+          return (Number(t.amount) || 0).toFixed(2).includes(amountQuery)
+            || normalizeSearchText(t.label).includes(q)
+            || searchableCategory.includes(q)
+            || `${d}/${m}`.includes(q)
+            || `${d}/${m}/${y}`.includes(q);
         });
       }
 
