@@ -2307,10 +2307,9 @@ button.ios-press:active,
     const formatComparisonMonth = (monthKey, format = "long") => {
       const [year, month] = String(monthKey || "").split("-").map(Number);
       if (!Number.isFinite(year) || !Number.isFinite(month)) return "Mois inconnu";
-      return new Intl.DateTimeFormat("fr-FR", {
-        month: format === "short" ? "short" : "long",
-        year: "numeric"
-      }).format(new Date(year, month - 1, 1));
+      const options = { month: format === "long" ? "long" : "short" };
+      if (format !== "compact") options.year = "numeric";
+      return new Intl.DateTimeFormat("fr-FR", options).format(new Date(year, month - 1, 1));
     };
 
     const getMonthlySnapshot = (source, monthKey) => {
@@ -2370,13 +2369,15 @@ button.ios-press:active,
       const referenceLabel = formatComparisonMonth(comparisonMonthReference);
       const primaryShort = formatComparisonMonth(comparisonMonthPrimary, "short");
       const referenceShort = formatComparisonMonth(comparisonMonthReference, "short");
+      const primaryCompact = formatComparisonMonth(comparisonMonthPrimary, "compact");
+      const referenceCompact = formatComparisonMonth(comparisonMonthReference, "compact");
 
       if ($("comparisonMonthPrimaryLabel")) $("comparisonMonthPrimaryLabel").textContent = primaryLabel;
       if ($("comparisonMonthReferenceLabel")) $("comparisonMonthReferenceLabel").textContent = referenceLabel;
       if ($("comparisonMonthPrimaryButton")) $("comparisonMonthPrimaryButton").setAttribute("aria-label", `Choisir le mois comparé, ${primaryLabel}`);
       if ($("comparisonMonthReferenceButton")) $("comparisonMonthReferenceButton").setAttribute("aria-label", `Choisir le mois de référence, ${referenceLabel}`);
-      $all(".comparison-primary-short").forEach(el => { el.textContent = primaryShort; });
-      $all(".comparison-reference-short").forEach(el => { el.textContent = referenceShort; });
+      $all(".comparison-primary-short").forEach(el => { el.textContent = primaryCompact; });
+      $all(".comparison-reference-short").forEach(el => { el.textContent = referenceCompact; });
 
       const emptyMessages = $("comparisonEmptyMessages");
       if (emptyMessages) {
