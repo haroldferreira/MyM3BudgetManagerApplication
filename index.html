@@ -579,6 +579,58 @@ body > #navBar.nav-bar,
 #screenAnalytics .breakdown-row{margin:0 !important;padding:12px 13px !important;border:3px solid var(--nb-black) !important;border-radius:16px !important;background:#FFFDF2 !important;box-shadow:var(--nb-shadow-sm) !important;font-size:12px !important;}
 #screenAnalytics .breakdown-row:last-child{border-bottom:3px solid var(--nb-black) !important;}
 #screenAnalytics .ios-badge{box-shadow:2px 2px 0 var(--nb-black) !important;}
+.comparison-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:16px;}
+.comparison-selectors{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin-bottom:14px;}
+.comparison-month-button{min-width:0;min-height:62px;padding:10px 11px;display:grid;grid-template-columns:minmax(0,1fr) 22px;align-items:center;gap:7px;border:3px solid var(--nb-black);border-radius:16px;background:var(--nb-white);color:var(--nb-black);box-shadow:var(--nb-shadow-sm);font:inherit;text-align:left;cursor:pointer;}
+.comparison-month-button:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--nb-black);}
+.comparison-month-copy{min-width:0;display:flex;flex-direction:column;gap:3px;}
+.comparison-month-copy small{font-size:9px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--nb-muted);}
+.comparison-month-copy strong{font-size:14px;line-height:1.2;font-weight:800;text-transform:capitalize;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.comparison-month-button > .material-symbols-rounded{font-size:20px;color:var(--nb-purple);}
+.comparison-empty-list{display:flex;flex-direction:column;gap:7px;margin-bottom:12px;}
+.comparison-empty-list:empty{display:none;}
+.comparison-empty-note{display:flex;align-items:center;gap:7px;padding:9px 10px;border:2px solid var(--nb-black);border-radius:12px;background:var(--nb-yellow);font-size:11px;font-weight:700;}
+.comparison-empty-note .material-symbols-rounded{font-size:18px;}
+.comparison-expense-status{margin-bottom:13px;padding:11px 12px;display:flex;align-items:center;gap:9px;border:3px solid var(--nb-black);border-radius:15px;box-shadow:var(--nb-shadow-sm);font-size:12px;font-weight:800;}
+.comparison-expense-status .material-symbols-rounded{font-size:21px;}
+.comparison-summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:20px;}
+.comparison-metric{min-width:0;padding:11px;border:3px solid var(--nb-black);border-radius:17px;background:var(--nb-white);box-shadow:var(--nb-shadow-sm);}
+.comparison-metric-label{margin-bottom:9px;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--nb-muted);}
+.comparison-metric-values{display:flex;flex-direction:column;gap:7px;}
+.comparison-metric-value{min-width:0;display:flex;align-items:baseline;justify-content:space-between;gap:6px;}
+.comparison-metric-value small{font-size:9px;font-weight:700;color:var(--nb-muted);text-transform:capitalize;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.comparison-metric-value strong{font-size:13px;font-weight:800;white-space:nowrap;}
+.comparison-delta{margin-top:10px;min-height:28px;padding:5px 7px;display:flex;align-items:center;justify-content:center;border:2px solid var(--nb-black);border-radius:9px;font-size:9px;line-height:1.25;font-weight:800;text-align:center;}
+.comparison-tone-good{background:var(--ios-green-soft);color:var(--nb-green);}
+.comparison-tone-warning{background:#FFE6A3;color:#8A5100;}
+.comparison-tone-bad{background:var(--ios-red-soft);color:var(--nb-red);}
+.comparison-tone-neutral{background:#EEE8D8;color:var(--nb-muted);}
+.comparison-category-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin-bottom:10px;padding-top:2px;border-top:3px solid var(--nb-black);}
+.comparison-category-heading h4{margin:13px 0 0;font-size:15px;font-weight:800;}
+.comparison-category-heading span{font-size:9px;font-weight:700;color:var(--nb-muted);text-align:right;}
+.comparison-category-list{display:flex;flex-direction:column;gap:10px;}
+.comparison-category-row{min-width:0;padding:11px 12px;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;border:3px solid var(--nb-black);border-radius:15px;background:var(--nb-white);box-shadow:var(--nb-shadow-sm);}
+.comparison-category-main{min-width:0;display:flex;align-items:center;gap:9px;}
+.comparison-category-icon{width:32px;height:32px;flex:0 0 32px;display:grid;place-items:center;border:2px solid var(--nb-black);border-radius:9px;background:var(--nb-blue);}
+.comparison-category-icon .material-symbols-rounded{font-size:17px;}
+.comparison-category-copy{min-width:0;}
+.comparison-category-copy strong{display:block;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.comparison-category-copy small{display:block;margin-top:3px;font-size:9px;font-weight:700;color:var(--nb-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.comparison-category-delta{max-width:126px;padding:5px 7px;border:2px solid var(--nb-black);border-radius:9px;font-size:9px;line-height:1.25;font-weight:800;text-align:right;}
+.comparison-category-empty{padding:14px;border:2px dashed var(--nb-black);border-radius:14px;color:var(--nb-muted);font-size:11px;font-weight:700;text-align:center;}
+@media (max-width:430px){
+  .comparison-selectors{grid-template-columns:1fr;}
+  .comparison-summary-grid{grid-template-columns:1fr;}
+  .comparison-metric{display:grid;grid-template-columns:76px minmax(0,1fr) minmax(94px,auto);align-items:center;gap:9px;}
+  .comparison-metric-label{margin:0;}
+  .comparison-delta{margin:0;}
+}
+@media (max-width:360px){
+  .comparison-metric{grid-template-columns:68px minmax(0,1fr);}
+  .comparison-delta{grid-column:1/-1;}
+  .comparison-category-row{grid-template-columns:1fr;}
+  .comparison-category-delta{max-width:none;text-align:center;}
+}
 #screenAnalytics,
     #screenSettings,
     #screenOperations{padding-bottom:126px !important;}
@@ -1125,6 +1177,70 @@ button.ios-press:active,
     </div>
 
     <div id="screenAnalytics" class="screen">
+      <!-- Comparaison entre deux mois -->
+      <div class="ios-card analytics-card comparison-card">
+        <div class="comparison-head">
+          <div>
+            <h3 class="analytics-title" style="font-size:18px;font-weight:800;">Comparaison mensuelle</h3>
+            <p style="font-size:11px;color:var(--md-sys-color-outline);">Comparez le mois sélectionné à un mois de référence.</p>
+          </div>
+          <span class="material-symbols-rounded" aria-hidden="true" style="font-size:28px;color:var(--nb-purple);">compare_arrows</span>
+        </div>
+
+        <div class="comparison-selectors">
+          <button id="comparisonMonthPrimaryButton" class="comparison-month-button ios-press" type="button" aria-haspopup="dialog" aria-expanded="false">
+            <span class="comparison-month-copy">
+              <small>Mois comparé</small>
+              <strong id="comparisonMonthPrimaryLabel">—</strong>
+            </span>
+            <span class="material-symbols-rounded" aria-hidden="true">calendar_month</span>
+          </button>
+          <button id="comparisonMonthReferenceButton" class="comparison-month-button ios-press" type="button" aria-haspopup="dialog" aria-expanded="false">
+            <span class="comparison-month-copy">
+              <small>Référence</small>
+              <strong id="comparisonMonthReferenceLabel">—</strong>
+            </span>
+            <span class="material-symbols-rounded" aria-hidden="true">calendar_month</span>
+          </button>
+        </div>
+
+        <div id="comparisonEmptyMessages" class="comparison-empty-list" aria-live="polite"></div>
+        <div id="comparisonExpenseStatus" class="comparison-expense-status comparison-tone-neutral" aria-live="polite"></div>
+
+        <div class="comparison-summary-grid">
+          <div class="comparison-metric">
+            <div class="comparison-metric-label">Revenus</div>
+            <div class="comparison-metric-values">
+              <div class="comparison-metric-value"><small class="comparison-primary-short">Mois comparé</small><strong id="comparisonIncomePrimary">0,00 €</strong></div>
+              <div class="comparison-metric-value"><small class="comparison-reference-short">Référence</small><strong id="comparisonIncomeReference">0,00 €</strong></div>
+            </div>
+            <div id="comparisonIncomeDelta" class="comparison-delta comparison-tone-neutral">0,00 € · 0 %</div>
+          </div>
+          <div class="comparison-metric">
+            <div class="comparison-metric-label">Dépenses</div>
+            <div class="comparison-metric-values">
+              <div class="comparison-metric-value"><small class="comparison-primary-short">Mois comparé</small><strong id="comparisonExpensePrimary">0,00 €</strong></div>
+              <div class="comparison-metric-value"><small class="comparison-reference-short">Référence</small><strong id="comparisonExpenseReference">0,00 €</strong></div>
+            </div>
+            <div id="comparisonExpenseDelta" class="comparison-delta comparison-tone-neutral">0,00 € · 0 %</div>
+          </div>
+          <div class="comparison-metric">
+            <div class="comparison-metric-label">Solde</div>
+            <div class="comparison-metric-values">
+              <div class="comparison-metric-value"><small class="comparison-primary-short">Mois comparé</small><strong id="comparisonBalancePrimary">0,00 €</strong></div>
+              <div class="comparison-metric-value"><small class="comparison-reference-short">Référence</small><strong id="comparisonBalanceReference">0,00 €</strong></div>
+            </div>
+            <div id="comparisonBalanceDelta" class="comparison-delta comparison-tone-neutral">0,00 € · 0 %</div>
+          </div>
+        </div>
+
+        <div class="comparison-category-heading">
+          <h4>Variations par catégorie</h4>
+          <span>Triées par écart absolu</span>
+        </div>
+        <div id="comparisonCategoryList" class="comparison-category-list"></div>
+      </div>
+
       <!-- Règle 50 / 30 / 20 -->
       <div class="ios-card analytics-card analytics-rules">
         <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 2px;">Règle 50 / 30 / 20</h3>
@@ -1568,7 +1684,13 @@ button.ios-press:active,
     let budgets = {}; // { [categoryId]: montant mensuel }
     let currentFilter = "all", editingId = null, selectedId = null, modalType = "expense", searchQuery = "";
     let currentMonth = new Date().toISOString().slice(0, 7);
-    let monthPickerMode = "navigate"; // navigate | reschedule
+    let comparisonMonthPrimary = currentMonth;
+    let comparisonMonthReference = (() => {
+      const [year, month] = currentMonth.split("-").map(Number);
+      const previous = new Date(year, month - 2, 1);
+      return `${previous.getFullYear()}-${String(previous.getMonth() + 1).padStart(2, "0")}`;
+    })();
+    let monthPickerMode = "navigate"; // navigate | reschedule | comparison-primary | comparison-reference
     let rescheduleTxId = null;
     let longPressTimer = null;
     let longPressStart = null;
@@ -2182,7 +2304,165 @@ button.ios-press:active,
       renderApp();
     }
 
+    const formatComparisonMonth = (monthKey, format = "long") => {
+      const [year, month] = String(monthKey || "").split("-").map(Number);
+      if (!Number.isFinite(year) || !Number.isFinite(month)) return "Mois inconnu";
+      return new Intl.DateTimeFormat("fr-FR", {
+        month: format === "short" ? "short" : "long",
+        year: "numeric"
+      }).format(new Date(year, month - 1, 1));
+    };
+
+    const getMonthlySnapshot = (source, monthKey) => {
+      const items = source.filter(t => String(t.date || "").slice(0, 7) === monthKey);
+      const incomes = items
+        .filter(t => t.type === "income")
+        .reduce((total, t) => total + (Number(t.amount) || 0), 0);
+      const expenseItems = items.filter(t => t.type === "expense" && !t.isReimbursed);
+      const expenses = expenseItems.reduce((total, t) => total + (Number(t.amount) || 0), 0);
+      const categories = expenseItems.reduce((totals, t) => {
+        const categoryId = t.category || "divers";
+        totals[categoryId] = (totals[categoryId] || 0) + (Number(t.amount) || 0);
+        return totals;
+      }, {});
+      return { monthKey, items, incomes, expenses, balance: incomes - expenses, categories };
+    };
+
+    const getComparisonDelta = (current, reference) => {
+      const amount = current - reference;
+      const percent = reference === 0
+        ? (current === 0 ? 0 : null)
+        : (amount / Math.abs(reference)) * 100;
+      return { amount, percent };
+    };
+
+    const getExpenseChangeTone = delta => {
+      if (Math.abs(delta.amount) < 0.005) return "neutral";
+      if (delta.amount < 0) return "good";
+      // Jusqu'à 10 % la hausse reste légère ; au-delà elle est signalée comme forte.
+      if (delta.percent !== null && delta.percent <= 10) return "warning";
+      return "bad";
+    };
+
+    const getImprovementTone = delta => {
+      if (Math.abs(delta.amount) < 0.005) return "neutral";
+      return delta.amount > 0 ? "good" : "bad";
+    };
+
+    const formatSignedCurrency = value => `${value > 0 ? "+" : ""}${fmt(value)}`;
+    const formatComparisonPercent = percent => {
+      if (percent === null) return "% non calculable";
+      const formatted = new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 1 }).format(Math.abs(percent));
+      return `${percent > 0 ? "+" : percent < 0 ? "−" : ""}${formatted} %`;
+    };
+    const formatComparisonDelta = delta => `${formatSignedCurrency(delta.amount)} · ${formatComparisonPercent(delta.percent)}`;
+    const escapeComparisonHtml = value => String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+
+    function renderMonthlyComparison() {
+      const primary = getMonthlySnapshot(transactions, comparisonMonthPrimary);
+      const reference = getMonthlySnapshot(transactions, comparisonMonthReference);
+      const primaryLabel = formatComparisonMonth(comparisonMonthPrimary);
+      const referenceLabel = formatComparisonMonth(comparisonMonthReference);
+      const primaryShort = formatComparisonMonth(comparisonMonthPrimary, "short");
+      const referenceShort = formatComparisonMonth(comparisonMonthReference, "short");
+
+      if ($("comparisonMonthPrimaryLabel")) $("comparisonMonthPrimaryLabel").textContent = primaryLabel;
+      if ($("comparisonMonthReferenceLabel")) $("comparisonMonthReferenceLabel").textContent = referenceLabel;
+      if ($("comparisonMonthPrimaryButton")) $("comparisonMonthPrimaryButton").setAttribute("aria-label", `Choisir le mois comparé, ${primaryLabel}`);
+      if ($("comparisonMonthReferenceButton")) $("comparisonMonthReferenceButton").setAttribute("aria-label", `Choisir le mois de référence, ${referenceLabel}`);
+      $all(".comparison-primary-short").forEach(el => { el.textContent = primaryShort; });
+      $all(".comparison-reference-short").forEach(el => { el.textContent = referenceShort; });
+
+      const emptyMessages = $("comparisonEmptyMessages");
+      if (emptyMessages) {
+        const messages = [];
+        if (!primary.items.length) messages.push(`Aucune transaction en ${primaryLabel}.`);
+        if (!reference.items.length) messages.push(`Aucune transaction en ${referenceLabel}.`);
+        emptyMessages.innerHTML = messages.map(message => `
+          <div class="comparison-empty-note">
+            <span class="material-symbols-rounded" aria-hidden="true">info</span>
+            <span>${escapeComparisonHtml(message)}</span>
+          </div>`).join("");
+      }
+
+      const setMetric = (name, current, previous, tone) => {
+        if ($(`comparison${name}Primary`)) $(`comparison${name}Primary`).textContent = fmt(current);
+        if ($(`comparison${name}Reference`)) $(`comparison${name}Reference`).textContent = fmt(previous);
+        const delta = getComparisonDelta(current, previous);
+        const deltaEl = $(`comparison${name}Delta`);
+        if (deltaEl) {
+          deltaEl.className = `comparison-delta comparison-tone-${tone(delta)}`;
+          deltaEl.textContent = formatComparisonDelta(delta);
+          if (delta.percent === null) deltaEl.title = "Pourcentage indisponible car la valeur de référence est nulle";
+          else deltaEl.removeAttribute("title");
+        }
+        return delta;
+      };
+
+      setMetric("Income", primary.incomes, reference.incomes, getImprovementTone);
+      const expenseDelta = setMetric("Expense", primary.expenses, reference.expenses, getExpenseChangeTone);
+      setMetric("Balance", primary.balance, reference.balance, getImprovementTone);
+
+      const expenseStatus = $("comparisonExpenseStatus");
+      if (expenseStatus) {
+        const tone = getExpenseChangeTone(expenseDelta);
+        let icon = "drag_handle";
+        let text = `Dépenses stables entre ${referenceShort} et ${primaryShort}.`;
+        if (expenseDelta.amount < 0) {
+          icon = "trending_down";
+          text = `Amélioration : les dépenses ont diminué de ${fmt(Math.abs(expenseDelta.amount))} (${formatComparisonPercent(expenseDelta.percent).replace("−", "")}).`;
+        } else if (expenseDelta.amount > 0 && tone === "warning") {
+          icon = "trending_up";
+          text = `Légère hausse des dépenses : ${formatComparisonDelta(expenseDelta)}.`;
+        } else if (expenseDelta.amount > 0) {
+          icon = "trending_up";
+          text = expenseDelta.percent === null
+            ? `Forte hausse des dépenses : ${formatSignedCurrency(expenseDelta.amount)} depuis une référence à 0 €.`
+            : `Forte hausse des dépenses : ${formatComparisonDelta(expenseDelta)}.`;
+        }
+        expenseStatus.className = `comparison-expense-status comparison-tone-${tone}`;
+        expenseStatus.innerHTML = `<span class="material-symbols-rounded" aria-hidden="true">${icon}</span><span>${escapeComparisonHtml(text)}</span>`;
+      }
+
+      const categoryList = $("comparisonCategoryList");
+      if (!categoryList) return;
+      const categoryIds = [...new Set([...Object.keys(primary.categories), ...Object.keys(reference.categories)])];
+      const rows = categoryIds.map(categoryId => {
+        const current = primary.categories[categoryId] || 0;
+        const previous = reference.categories[categoryId] || 0;
+        const delta = getComparisonDelta(current, previous);
+        const category = ALL_CATS.find(cat => cat.id === categoryId) || { label: categoryId || "Divers", icon: "category" };
+        return { category, current, previous, delta, tone: getExpenseChangeTone(delta) };
+      }).sort((a, b) => Math.abs(b.delta.amount) - Math.abs(a.delta.amount) || b.current - a.current);
+
+      if (!rows.length) {
+        categoryList.innerHTML = `<div class="comparison-category-empty">Aucune dépense non remboursée à comparer pour ces deux mois.</div>`;
+        return;
+      }
+
+      categoryList.innerHTML = rows.map(row => {
+        const direction = row.delta.amount > 0 ? "Hausse" : row.delta.amount < 0 ? "Baisse" : "Stable";
+        return `
+          <div class="comparison-category-row">
+            <div class="comparison-category-main">
+              <div class="comparison-category-icon"><span class="material-symbols-rounded" aria-hidden="true">${escapeComparisonHtml(row.category.icon)}</span></div>
+              <div class="comparison-category-copy">
+                <strong>${escapeComparisonHtml(row.category.label)}</strong>
+                <small>${escapeComparisonHtml(referenceShort)} ${fmt(row.previous)} → ${escapeComparisonHtml(primaryShort)} ${fmt(row.current)}</small>
+              </div>
+            </div>
+            <div class="comparison-category-delta comparison-tone-${row.tone}">${direction} · ${escapeComparisonHtml(formatComparisonDelta(row.delta))}</div>
+          </div>`;
+      }).join("");
+    }
+
     function renderAnalytics(mTx = getMonthTx(), inc = sum(mTx, t => t.type === "income")) {
+      renderMonthlyComparison();
       const obl = sum(mTx, t => t.type === "expense" && !t.isReimbursed && ((t.isFixed === true || t.isFixed === "true" || t.isFixed === 1) || t.category === "supermarche"));
       const wants = sum(mTx, t => t.type === "expense" && !t.isReimbursed && !t.isFixed && t.category !== "supermarche");
       const sav = Math.max(0, inc - obl - wants);
@@ -3350,19 +3630,36 @@ button.ios-press:active,
       if ($("monthPickerBackdrop")?.classList.contains("show")) renderMonthPicker();
     };
 
+    const getMonthPickerTrigger = () => {
+      if (monthPickerMode === "comparison-primary") return $("comparisonMonthPrimaryButton");
+      if (monthPickerMode === "comparison-reference") return $("comparisonMonthReferenceButton");
+      return $("btnMonthPicker");
+    };
+
     const renderMonthPicker = () => {
       const grid = $("monthPickerGrid");
       if (!grid) return;
       $("monthPickerTitle").textContent = String(monthPickerYear);
       const txForReschedule = monthPickerMode === "reschedule" ? transactions.find(t => t.id === rescheduleTxId) : null;
-      const selectedKey = txForReschedule?.date?.slice(0, 7) || currentMonth;
+      const selectedKey = txForReschedule?.date?.slice(0, 7)
+        || (monthPickerMode === "comparison-primary" ? comparisonMonthPrimary : null)
+        || (monthPickerMode === "comparison-reference" ? comparisonMonthReference : null)
+        || currentMonth;
       const [selectedYear, selectedMonth] = selectedKey.split("-").map(Number);
       const now = new Date();
       const currentYear = now.getFullYear();
       const currentMonthNumber = now.getMonth() + 1;
       const kicker = $("monthPickerPanel")?.querySelector(".month-picker-kicker");
-      if (kicker) kicker.textContent = monthPickerMode === "reschedule" ? "REPORTER VERS" : "CHOISIR UN MOIS";
-      if ($("monthPickerToday")) $("monthPickerToday").textContent = monthPickerMode === "reschedule" ? "Ce mois" : "Ce mois";
+      if (kicker) {
+        kicker.textContent = monthPickerMode === "reschedule"
+          ? "REPORTER VERS"
+          : monthPickerMode === "comparison-primary"
+            ? "MOIS À COMPARER"
+            : monthPickerMode === "comparison-reference"
+              ? "MOIS DE RÉFÉRENCE"
+              : "CHOISIR UN MOIS";
+      }
+      if ($("monthPickerToday")) $("monthPickerToday").textContent = "Ce mois";
       grid.innerHTML = MONTH_NAMES.map((label, index) => {
         const monthNumber = index + 1;
         const selected = selectedYear === monthPickerYear && selectedMonth === monthNumber;
@@ -3377,6 +3674,18 @@ button.ios-press:active,
             const txId = rescheduleTxId;
             closeMonthPicker();
             await rescheduleTransaction(txId, targetMonth);
+            return;
+          }
+          if (monthPickerMode === "comparison-primary") {
+            comparisonMonthPrimary = targetMonth;
+            renderMonthlyComparison();
+            closeMonthPicker();
+            return;
+          }
+          if (monthPickerMode === "comparison-reference") {
+            comparisonMonthReference = targetMonth;
+            renderMonthlyComparison();
+            closeMonthPicker();
             return;
           }
           currentMonth = targetMonth;
@@ -3394,17 +3703,17 @@ button.ios-press:active,
       renderMonthPicker();
       $("monthPickerBackdrop").classList.add("show");
       $("monthPickerBackdrop").setAttribute("aria-hidden", "false");
-      $("btnMonthPicker").setAttribute("aria-expanded", "true");
+      getMonthPickerTrigger()?.setAttribute("aria-expanded", "true");
     };
 
     const closeMonthPicker = () => {
+      getMonthPickerTrigger()?.setAttribute("aria-expanded", "false");
       $("monthPickerBackdrop").classList.remove("show");
       $("monthPickerBackdrop").setAttribute("aria-hidden", "true");
-      $("btnMonthPicker").setAttribute("aria-expanded", "false");
       if (monthPickerMode === "reschedule") {
-        monthPickerMode = "navigate";
         rescheduleTxId = null;
       }
+      monthPickerMode = "navigate";
     };
 
     updateMonth();
@@ -3413,6 +3722,14 @@ button.ios-press:active,
       monthPickerMode = "navigate";
       rescheduleTxId = null;
       openMonthPicker();
+    };
+    $("comparisonMonthPrimaryButton").onclick = () => {
+      monthPickerMode = "comparison-primary";
+      openMonthPicker(comparisonMonthPrimary);
+    };
+    $("comparisonMonthReferenceButton").onclick = () => {
+      monthPickerMode = "comparison-reference";
+      openMonthPicker(comparisonMonthReference);
     };
     $("btnNextMonth").onclick = () => shiftCurrentMonth(1);
     $("monthPickerPrevYear").onclick = () => { monthPickerYear -= 1; renderMonthPicker(); };
@@ -3425,6 +3742,18 @@ button.ios-press:active,
         const txId = rescheduleTxId;
         closeMonthPicker();
         await rescheduleTransaction(txId, thisMonth);
+        return;
+      }
+      if (monthPickerMode === "comparison-primary") {
+        comparisonMonthPrimary = thisMonth;
+        renderMonthlyComparison();
+        closeMonthPicker();
+        return;
+      }
+      if (monthPickerMode === "comparison-reference") {
+        comparisonMonthReference = thisMonth;
+        renderMonthlyComparison();
+        closeMonthPicker();
         return;
       }
       currentMonth = thisMonth;
